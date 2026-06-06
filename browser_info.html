@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Информация о браузере</title>
+<style>
+body{font-family:Arial,sans-serif;max-width:700px;margin:40px auto;padding:20px}
+button{padding:10px 20px;font-size:16px}
+pre{background:#f0f0f0;padding:15px;border-radius:8px;white-space:pre-wrap}
+</style>
+</head>
+<body>
+<h1>Информация о браузере</h1>
+<button onclick="showInfo()">Показать данные</button>
+<pre id="output"></pre>
+
+<script>
+function showInfo() {
+  const data = {
+    userAgent: navigator.userAgent,
+    platform: navigator.platform,
+    language: navigator.language,
+    screenWidth: screen.width,
+    screenHeight: screen.height,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+  };
+
+  document.getElementById('output').textContent =
+    JSON.stringify(data, null, 2);
+}
+</script>
+</body>
+</html>
